@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontal Smile Assessment — Standalone Analytics & Curvature Dashboard</title>
+  <meta name="description" content="Scientific research analytics dashboard displaying live statistics and curvature ranking charts from Google Spreadsheets." />
+
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Chart.js 4.4.x CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+  <!-- Separated CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Separated Application Logic -->
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="dashboard-container">
+
+    <!-- ===== PREMIUM HERO HEADER ===== -->
+    <header class="hero-header">
+      <!-- Decorative background blobs -->
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+
+      <!-- Top row: brand + action buttons -->
+      <div class="hero-top-row">
+        <div class="brand-section">
+          <div class="brand-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3v18h18" />
+              <path d="m19 9-5 5-4-4-3 3" />
+            </svg>
+          </div>
+          <div class="brand-meta">
+            <div class="brand-eyebrow">Scientific Research Analytics</div>
+            <h1>Frontal Smile Assessment</h1>
+            <p class="brand-subtitle">Curvature &amp; Attractiveness Dashboard · Google Sheets Sync</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button id="refreshBtn" class="btn btn-primary" title="Refresh live data from Google Sheets">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+              <path d="M16 21h5v-5" />
+            </svg>
+            Sync Sheet
+          </button>
+
+          <button id="exportCsvBtn" class="btn btn-secondary" title="Export current dataset to CSV">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Export CSV
+          </button>
+
+          <button id="dataSourceBtn" class="btn btn-secondary" title="Data Source Settings">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+            Sheet Settings
+          </button>
+
+          <button id="themeToggleBtn" class="theme-switch-btn" title="Click to swap between Light and Dark mode" aria-label="Toggle theme">
+            <span class="theme-switch-pill">
+              <span class="theme-switch-handle"></span>
+            </span>
+            <span class="theme-switch-text" id="themeSwitchLabel">
+              <span id="themeSwitchIcon">🌙</span> Dark Mode
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Status bar row -->
+      <div class="hero-status-row">
+        <div class="hero-status-item">
+          <span class="status-dot pulse" id="statusDot"></span>
+          <span class="hero-status-label" id="statusText">Connecting...</span>
+        </div>
+        <div class="hero-status-divider"></div>
+        <div class="hero-status-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <span class="hero-status-label">Tab: <strong>Responses</strong></span>
+        </div>
+        <div class="hero-status-divider"></div>
+        <div class="hero-status-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="hero-status-label">Last sync: <strong id="lastSyncTime">—</strong></span>
+        </div>
+        <div class="hero-status-divider"></div>
+        <div class="hero-status-item">
+          <span class="hero-source-badge" id="headerStatusBadge">Direct Google API</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Disconnected Sheet Warning Alert Banner (Appears when sheet cannot be reached) -->
+    <div class="sheet-disconnected-banner" id="sheetDisconnectedBanner" style="display: none;">
+      <div class="alert-content">
+        <div class="alert-icon-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div class="alert-text">
+          <h4>Google Spreadsheet Not Connected</h4>
+          <p id="disconnectedAlertDetails">Unable to load live responses from Google Sheets. Ensure your spreadsheet is shared with <strong>"Anyone with the link"</strong> as <strong>Viewer</strong>, or check the Sheet ID.</p>
+        </div>
+      </div>
+      <div class="alert-actions">
+        <button class="btn btn-alert-retry" id="alertRetryBtn" onclick="loadData(true)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+            <path d="M16 21h5v-5"/>
+          </svg>
+          Retry Connection
+        </button>
+        <button class="btn btn-alert-settings" id="alertSettingsBtn" onclick="openSourceModal()">
+          Sheet Settings
+        </button>
+      </div>
+    </div>
+
+    <!-- Sheet meta banner hidden; info moved to hero status row -->
+    <div id="sheetMetaBanner" style="display:none;"></div>
+
+    <!-- ===== PREMIUM KPI GRID ===== -->
+    <section class="kpi-grid">
+
+      <!-- Card 1: Total Participants -->
+      <article class="kpi-card" data-accent="teal">
+        <div class="kpi-accent-bar"></div>
+        <div class="kpi-body">
+          <div class="kpi-icon-wrap teal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Total Participants</span>
+            <div class="kpi-value" id="kpiTotalSubmissions">—</div>
+            <div class="kpi-footer">
+              <span class="kpi-badge" id="kpiBadgeStatus">Awaiting</span>
+              <span class="kpi-sub" id="kpiTotalSubtitle">Awaiting live data</span>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-sparkline-bar"><div class="kpi-sparkline-fill teal" style="width:0%"></div></div>
+      </article>
+
+      <!-- Card 2: Gender Ratio -->
+      <article class="kpi-card" data-accent="indigo">
+        <div class="kpi-accent-bar indigo"></div>
+        <div class="kpi-body">
+          <div class="kpi-icon-wrap indigo">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M12 3v18"/>
+              <path d="M12 12a9 9 0 0 1 9 0"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Gender Ratio</span>
+            <div class="kpi-value" id="kpiGenderRatio">—</div>
+            <div class="kpi-footer">
+              <span class="kpi-sub" id="kpiGenderSubtitle">Male vs Female</span>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-sparkline-bar"><div class="kpi-sparkline-fill indigo" style="width:0%"></div></div>
+      </article>
+
+      <!-- Card 3: Dental vs General -->
+      <article class="kpi-card" data-accent="amber">
+        <div class="kpi-accent-bar amber"></div>
+        <div class="kpi-body">
+          <div class="kpi-icon-wrap amber">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C7.5 2 4 4.5 4 8c0 3.5 1.5 7.5 3 11 .5 1.2 1.5 2 2.8 1.8 1.5-.2 2.2-2 2.2-3.8 0 1.8.7 3.6 2.2 3.8 1.3.2 2.3-.6 2.8-1.8 1.5-3.5 3-7.5 3-11 0-3.5-3.5-6-8-6z"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Dental vs General</span>
+            <div class="kpi-value" id="kpiProfessionBreakdown">—</div>
+            <div class="kpi-footer">
+              <span class="kpi-sub" id="kpiProfessionSubtitle">Ortho · Dentist · Non-dental</span>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-sparkline-bar"><div class="kpi-sparkline-fill amber" style="width:0%"></div></div>
+      </article>
+
+      <!-- Card 4: Avg Duration -->
+      <article class="kpi-card" data-accent="purple">
+        <div class="kpi-accent-bar purple"></div>
+        <div class="kpi-body">
+          <div class="kpi-icon-wrap purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Avg Duration</span>
+            <div class="kpi-value" id="kpiAvgDuration">—</div>
+            <div class="kpi-footer">
+              <span class="kpi-sub">Average time to complete</span>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-sparkline-bar"><div class="kpi-sparkline-fill purple" style="width:0%"></div></div>
+      </article>
+
+      <!-- Card 5: Smile Score -->
+      <article class="kpi-card" data-accent="teal">
+        <div class="kpi-accent-bar teal"></div>
+        <div class="kpi-body">
+          <div class="kpi-icon-wrap teal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+              <line x1="9" y1="9" x2="9.01" y2="9"/>
+              <line x1="15" y1="9" x2="15.01" y2="9"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Overall Smile Score</span>
+            <div class="kpi-value" id="kpiAvgSmileRating">—</div>
+            <div class="kpi-footer">
+              <span class="kpi-sub">Mean rating across all photos</span>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-sparkline-bar"><div class="kpi-sparkline-fill teal" style="width:0%"></div></div>
+      </article>
+
+      <!-- Card 6: Avg Experience -->
+      <article class="kpi-card" data-accent="rose">
+        <div class="kpi-accent-bar rose"></div>
+        <div class="kpi-body">
+          <div class="kpi-icon-wrap rose">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Avg Experience</span>
+            <div class="kpi-value" id="kpiAvgExperience">—</div>
+            <div class="kpi-footer">
+              <span class="kpi-sub" id="kpiExperienceSubtitle">Specialist practice years</span>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-sparkline-bar"><div class="kpi-sparkline-fill rose" style="width:0%"></div></div>
+      </article>
+
+    </section>
+
+    <!-- Toolbar: Filters & Live Search -->
+    <section class="toolbar-section">
+      <div class="filter-group">
+        <span class="filter-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+          </svg>
+          Filter Data:
+        </span>
+
+        <select id="filterOccupation" class="filter-select" aria-label="Filter by Occupation">
+          <option value="all">All Professions</option>
+          <option value="orthodontist">Orthodontists</option>
+          <option value="dentist">General Dentists</option>
+          <option value="non_dental">Non-Dental (Public)</option>
+        </select>
+
+        <select id="filterGender" class="filter-select" aria-label="Filter by Gender">
+          <option value="all">All Genders</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+
+        <select id="filterAgeGroup" class="filter-select" aria-label="Filter by Age Group">
+          <option value="all">All Ages</option>
+          <option value="18_24">18 - 24 yrs</option>
+          <option value="25_34">25 - 34 yrs</option>
+          <option value="35_45">35 - 45 yrs</option>
+          <option value="over_45">&gt; 45 yrs</option>
+        </select>
+
+        <select id="filterLanguage" class="filter-select" aria-label="Filter by Language">
+          <option value="all">All Languages</option>
+          <option value="ar">Arabic (العربية)</option>
+          <option value="en">English</option>
+        </select>
+
+        <button id="resetFiltersBtn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;">
+          Reset Filters
+        </button>
+      </div>
+
+      <div class="toolbar-status">
+        Showing <strong id="filteredCount">0</strong> of <strong id="totalCount">0</strong> responses
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         DEDICATED SECTION: Curvature Assessment (Questions 1 to 6 Rankings)
+         Organized separately per question as requested!
+         ========================================================================== -->
+    <section class="curvature-section">
+      <div class="curvature-header">
+        <div class="curvature-title-group">
+          <h2>
+            <span>📐</span> Curvature &amp; Exposure Analysis (Click-to-Rate Questions 1 to 6)
+          </h2>
+          <p>
+            Detailed separate curvature preference charts for each ranking question. Compare #1 choice votes, full rank tier distributions, and differences between dental specialists and the general public.
+          </p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs to switch between All Questions or Individual Questions -->
+      <nav class="curvature-tabs" aria-label="Curvature Questions Navigation">
+        <button class="q-tab-btn active" data-question="all">
+          <span class="tab-badge">Overview</span> All 6 Questions
+        </button>
+        <button class="q-tab-btn" data-question="Q1">
+          <span class="tab-badge green">Q1</span> Straight (Gingival)
+        </button>
+        <button class="q-tab-btn" data-question="Q2">
+          <span class="tab-badge green">Q2</span> Slight (Gingival)
+        </button>
+        <button class="q-tab-btn" data-question="Q3">
+          <span class="tab-badge green">Q3</span> Banana (Gingival)
+        </button>
+        <button class="q-tab-btn" data-question="Q4">
+          <span class="tab-badge red">Q4</span> Straight (Lip Line)
+        </button>
+        <button class="q-tab-btn" data-question="Q5">
+          <span class="tab-badge red">Q5</span> Slight (Lip Line)
+        </button>
+        <button class="q-tab-btn" data-question="Q6">
+          <span class="tab-badge red">Q6</span> Banana (Lip Line)
+        </button>
+      </nav>
+
+      <!-- Content Area: Rendered dynamically by app.js based on active tab -->
+      <div id="curvatureContentArea">
+        <!-- Rendered via JavaScript -->
+      </div>
+    </section>
+
+    <!-- General Demographic & Perception Charts -->
+    <main class="charts-grid">
+
+      <!-- Profession & Gender -->
+      <section class="chart-card col-6">
+        <div class="chart-header">
+          <div class="chart-title-area">
+            <h2><span>👥</span> Profession &amp; Gender Distribution</h2>
+            <p>Respondent counts across professional categories and genders</p>
+          </div>
+          <span class="chart-badge">Demographics</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartDemographics"></canvas>
+        </div>
+      </section>
+
+      <!-- Age Demographics -->
+      <section class="chart-card col-6">
+        <div class="chart-header">
+          <div class="chart-title-area">
+            <h2><span>🎂</span> Age Bracket Distribution</h2>
+            <p>Proportion of survey respondents by age cohorts</p>
+          </div>
+          <span class="chart-badge">Age Groups</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartAgeGroup"></canvas>
+        </div>
+      </section>
+
+      <!-- Overall Curvature Attractiveness Profile -->
+      <section class="chart-card col-12">
+        <div class="chart-header">
+          <div class="chart-title-area">
+            <h2><span>📊</span> Overall Smile Attractiveness Scores by Curvature &amp; Exposure</h2>
+            <p>Comparative mean scores (10-100) across Straight, Slight, and Reverse/Banana curvature smiles</p>
+          </div>
+          <span class="chart-badge">Curvature Profile</span>
+        </div>
+        <div class="chart-wrapper tall">
+          <canvas id="chartCurvature"></canvas>
+        </div>
+      </section>
+
+      <!-- Radar: Specialist vs Layperson -->
+      <section class="chart-card col-6">
+        <div class="chart-header">
+          <div class="chart-title-area">
+            <h2><span>🎯</span> Perception by Profession (Radar Analysis)</h2>
+            <p>Comparing aesthetic scoring between Orthodontists, Dentists, and Laypersons</p>
+          </div>
+          <span class="chart-badge">Perception Gap</span>
+        </div>
+        <div class="chart-wrapper tall">
+          <canvas id="chartProfessionPerception"></canvas>
+        </div>
+      </section>
+
+      <!-- Duration Histogram -->
+      <section class="chart-card col-6">
+        <div class="chart-header">
+          <div class="chart-title-area">
+            <h2><span>⏱️</span> Completion Duration Distribution</h2>
+            <p>Survey engagement time curve across participants</p>
+          </div>
+          <span class="chart-badge">Time Metrics</span>
+        </div>
+        <div class="chart-wrapper tall">
+          <canvas id="chartDuration"></canvas>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Photo Rating Gallery & Ranking Leaders -->
+    <section class="photo-gallery-section">
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+          <span>🖼️</span> Evaluated Smile Photos (Ranked by Attractiveness)
+        </h2>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+          Click any photo to inspect detailed scores, standard deviations, and profession breakdown
+        </p>
+      </div>
+      <div class="photo-cards-grid" id="photoCardsGrid">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </section>
+
+    <!-- Raw Data Table (Live Sheet Rows) -->
+    <section class="table-section">
+      <div class="table-toolbar">
+        <div>
+          <h2 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main);">
+            📑 Recorded Submissions (Google Sheet: Responses)
+          </h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+            Raw rows synchronized directly with Google Spreadsheet
+          </p>
+        </div>
+
+        <div class="search-input-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" id="searchInput" placeholder="Search by name or submission ID..." aria-label="Search submissions" />
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Participant</th>
+              <th>Gender</th>
+              <th>Age</th>
+              <th>Profession</th>
+              <th>Experience</th>
+              <th>Duration</th>
+              <th>Avg Score</th>
+              <th>Submitted</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="responsesTableBody">
+            <tr>
+              <td colspan="10" style="text-align: center; padding: 30px; color: var(--text-dim);">
+                Loading survey data from Google Sheets...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+      <p>Dr. Nehmedo Frontal Smile Assessment Questionnaire · Scientific Research Study &copy; 2026</p>
+      <p style="margin-top: 4px; opacity: 0.7;">Standalone Analytics Dashboard · Connected to Google Spreadsheet</p>
+    </footer>
+
+  </div>
+
+  <!-- Detail Modal Dialog -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalTitle">Submission Details</h3>
+        <button class="modal-close" id="modalCloseBtn" aria-label="Close dialog">&times;</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Data Source Configuration Modal Dialog -->
+  <div class="modal-overlay" id="sourceModalOverlay">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3>Google Spreadsheet Settings</h3>
+        <button class="modal-close" id="sourceModalCloseBtn" aria-label="Close dialog">&times;</button>
+      </div>
+      <div>
+        <div class="form-field">
+          <label for="customSheetIdInput">Google Sheet ID:</label>
+          <input type="text" id="customSheetIdInput" placeholder="e.g. 1luj9ZvFhZI52_0mHeZ2dlhcVBt0gU0dZy71yWF35R8A" />
+          <small style="color: var(--text-dim); display: block; margin-top: 4px; font-size: 0.74rem;">
+            Default connects to the project's Google Sheet ID. Ensure sheet is set to "Anyone with the link can view".
+          </small>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button id="saveSourceBtn" class="btn btn-primary" style="flex: 1;">Connect Sheet</button>
+          <button id="loadDemoBtn" class="btn btn-secondary" style="flex: 1;">Load Demo Data (Testing)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Quick Theme Swap Button -->
+  <button id="floatingThemeBtn" class="floating-theme-toggle" title="Click to swap between Light and Dark mode" aria-label="Toggle theme">
+    <span id="floatingThemeIcon">🌙</span>
+    <span id="floatingThemeText">Dark Mode</span>
+  </button>
+
+</body>
+</html>
