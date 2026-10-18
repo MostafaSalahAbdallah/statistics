@@ -113,34 +113,37 @@ const CURVATURE_QUESTIONS = [
   }
 ];
 
-// Photo Definitions for the 21 Rating Questions
+// Photo Definitions for the 21 Rating Questions (Organized: Baseline -0, Green 1-3, Red 1-3)
 const PHOTO_CONFIG = [
+  // 1. Baseline -0 Photos
   { id: 'straight-0', name: 'Straight (0mm)', category: 'straight', exposure: '0mm', src: './photos/straight-0.jpg' },
   { id: 'slight-0', name: 'Slight (0mm)', category: 'slight', exposure: '0mm', src: './photos/slight-0.jpg' },
   { id: 'banana-0', name: 'Banana (0mm)', category: 'banana', exposure: '0mm', src: './photos/banana-0.jpg' },
 
+  // 2. Green Photos (Straight 1,2,3 -> Slight 1,2,3 -> Banana 1,2,3)
   { id: 'straight-1-green', name: 'Straight (1mm G)', category: 'straight', exposure: '1mm-G', src: './photos/straight-1-green.jpg' },
-  { id: 'slight-1-green', name: 'Slight (1mm G)', category: 'slight', exposure: '1mm-G', src: './photos/slight-1-green.jpg' },
-  { id: 'banana-1-green', name: 'Banana (1mm G)', category: 'banana', exposure: '1mm-G', src: './photos/banana-1-green.jpg' },
-
-  { id: 'straight-1-red', name: 'Straight (1mm R)', category: 'straight', exposure: '1mm-R', src: './photos/straight-1-red.jpg' },
-  { id: 'slight-1-red', name: 'Slight (1mm R)', category: 'slight', exposure: '1mm-R', src: './photos/slight-1-red.jpg' },
-  { id: 'banana-1-red', name: 'Banana (1mm R)', category: 'banana', exposure: '1mm-R', src: './photos/banana-1-red.jpg' },
-
   { id: 'straight-2-green', name: 'Straight (2mm G)', category: 'straight', exposure: '2mm-G', src: './photos/straight-2-green.jpg' },
-  { id: 'slight-2-green', name: 'Slight (2mm G)', category: 'slight', exposure: '2mm-G', src: './photos/slight-2-green.jpg' },
-  { id: 'banana-2-green', name: 'Banana (2mm G)', category: 'banana', exposure: '2mm-G', src: './photos/banana-2-green.jpg' },
-
-  { id: 'straight-2-red', name: 'Straight (2mm R)', category: 'straight', exposure: '2mm-R', src: './photos/straight-2-red.jpg' },
-  { id: 'slight-2-red', name: 'Slight (2mm R)', category: 'slight', exposure: '2mm-R', src: './photos/slight-2-red.jpg' },
-  { id: 'banana-2-red', name: 'Banana (2mm R)', category: 'banana', exposure: '2mm-R', src: './photos/banana-2-red.jpg' },
-
   { id: 'straight-3-green', name: 'Straight (3mm G)', category: 'straight', exposure: '3mm-G', src: './photos/straight-3-green.jpg' },
+
+  { id: 'slight-1-green', name: 'Slight (1mm G)', category: 'slight', exposure: '1mm-G', src: './photos/slight-1-green.jpg' },
+  { id: 'slight-2-green', name: 'Slight (2mm G)', category: 'slight', exposure: '2mm-G', src: './photos/slight-2-green.jpg' },
   { id: 'slight-3-green', name: 'Slight (3mm G)', category: 'slight', exposure: '3mm-G', src: './photos/slight-3-green.jpg' },
+
+  { id: 'banana-1-green', name: 'Banana (1mm G)', category: 'banana', exposure: '1mm-G', src: './photos/banana-1-green.jpg' },
+  { id: 'banana-2-green', name: 'Banana (2mm G)', category: 'banana', exposure: '2mm-G', src: './photos/banana-2-green.jpg' },
   { id: 'banana-3-green', name: 'Banana (3mm G)', category: 'banana', exposure: '3mm-G', src: './photos/banana-3-green.jpg' },
 
+  // 3. Red Photos (Straight 1,2,3 -> Slight 1,2,3 -> Banana 1,2,3)
+  { id: 'straight-1-red', name: 'Straight (1mm R)', category: 'straight', exposure: '1mm-R', src: './photos/straight-1-red.jpg' },
+  { id: 'straight-2-red', name: 'Straight (2mm R)', category: 'straight', exposure: '2mm-R', src: './photos/straight-2-red.jpg' },
   { id: 'straight-3-red', name: 'Straight (3mm R)', category: 'straight', exposure: '3mm-R', src: './photos/straight-3-red.jpg' },
+
+  { id: 'slight-1-red', name: 'Slight (1mm R)', category: 'slight', exposure: '1mm-R', src: './photos/slight-1-red.jpg' },
+  { id: 'slight-2-red', name: 'Slight (2mm R)', category: 'slight', exposure: '2mm-R', src: './photos/slight-2-red.jpg' },
   { id: 'slight-3-red', name: 'Slight (3mm R)', category: 'slight', exposure: '3mm-R', src: './photos/slight-3-red.jpg' },
+
+  { id: 'banana-1-red', name: 'Banana (1mm R)', category: 'banana', exposure: '1mm-R', src: './photos/banana-1-red.jpg' },
+  { id: 'banana-2-red', name: 'Banana (2mm R)', category: 'banana', exposure: '2mm-R', src: './photos/banana-2-red.jpg' },
   { id: 'banana-3-red', name: 'Banana (3mm R)', category: 'banana', exposure: '3mm-R', src: './photos/banana-3-red.jpg' },
 ];
 
